@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Email Assistant - Powered by Vercel</title>
+    <meta name="description" content="AI-powered email management with summarization, generation, and prioritization">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🤖 AI Email Assistant</h1>
+                <p>Smart email management with AI summarization, generation, and prioritization</p>
+            </div>
+            <button id="loginBtn" class="login-btn">Login with Google</button>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats-cards">
+            <div class="stat-card">
+                <h3>Total Emails</h3>
+                <span id="totalEmails">0</span>
+            </div>
+            <div class="stat-card">
+                <h3>High Priority</h3>
+                <span id="highPriority">0</span>
+            </div>
+            <div class="stat-card">
+                <h3>AI Powered</h3>
+                <span>🚀 Vercel</span>
+            </div>
+        </div>
+
+        <!-- AI Actions -->
+        <div class="ai-actions">
+            <button id="summaryBtn" class="ai-btn" disabled>
+                📊 AI Summary
+            </button>
+            <button id="prioritizeBtn" class="ai-btn" disabled>
+                🎯 AI Prioritize
+            </button>
+            <button id="composeBtn" class="ai-btn">
+                ✍️ AI Compose
+            </button>
+        </div>
+
+        <!-- AI Summary Section -->
+        <div id="summarySection" class="ai-section" style="display: none;">
+            <div class="section-header">
+                <h2>📊 AI Email Summary</h2>
+                <button class="close-btn" onclick="this.parentElement.parentElement.style.display='none'">×</button>
+            </div>
+            <div id="summaryContent" class="ai-content"></div>
+        </div>
+
+        <!-- Compose Email Section -->
+        <div id="composeSection" class="ai-section" style="display: none;">
+            <div class="section-header">
+                <h2>✍️ Compose Email with AI</h2>
+                <button class="close-btn" onclick="this.parentElement.parentElement.style.display='none'">×</button>
+            </div>
+            <div class="compose-form">
+                <input type="email" id="toEmail" placeholder="Recipient email" class="form-input">
+                <input type="text" id="emailSubject" placeholder="Email subject (AI will generate content)" class="form-input">
+                <textarea id="keyPoints" placeholder="Key points to include (optional)" class="form-textarea"></textarea>
+                <select id="toneSelect" class="form-select">
+                    <option value="professional">Professional</option>
+                    <option value="casual">Casual</option>
+                    <option value="friendly">Friendly</option>
+                    <option value="formal">Formal</option>
+                </select>
+                <div class="compose-actions">
+                    <button id="generateBtn" class="generate-btn">🤖 Generate with AI</button>
+                    <button id="sendBtn" class="send-btn" disabled>📤 Send Email</button>
+                </div>
+                <div id="generatedEmail" class="generated-email"></div>
+            </div>
+        </div>
+
+        <!-- Email Section -->
+        <div class="email-section">
+            <div class="section-header">
+                <h2>📨 Your Emails</h2>
+                <div class="header-actions">
+                    <button id="refreshBtn" class="refresh-btn">🔄 Refresh</button>
+                    <button id="logoutBtn" class="logout-btn" style="display: none;">🚪 Logout</button>
+                </div>
+            </div>
+            
+            <div id="priorityFilters" class="priority-filters" style="display: none;">
+                <button class="filter-btn active" data-priority="all">All</button>
+                <button class="filter-btn" data-priority="high">🔥 High</button>
+                <button class="filter-btn" data-priority="medium">⚠️ Medium</button>
+                <button class="filter-btn" data-priority="low">📋 Low</button>
+            </div>
+            
+            <div id="emailsContainer" class="emails-container">
+                <div class="welcome-message">
+                    <h3>Welcome to AI Email Assistant! 🤖</h3>
+                    <p>Login to access AI-powered email features:</p>
+                    <div class="features">
+                        <div class="feature">📊 Smart Summaries</div>
+                        <div class="feature">🎯 Priority Detection</div>
+                        <div class="feature">✍️ AI Email Writing</div>
+                        <div class="feature">📤 Easy Sending</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Powered by <strong>OpenAI + Vercel</strong> • Secure • Intelligent • Fast</p>
+        </footer>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>
