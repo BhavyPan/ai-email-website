@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 export default async function handler(req, res) {
   console.log('Token endpoint called with method:', req.method);
   
@@ -46,22 +44,29 @@ export default async function handler(req, res) {
         codeLength: code.length
       });
 
-      const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', 
-        new URLSearchParams({
+      // Use fetch instead of axios
+      const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
           code: code,
           client_id: process.env.GOOGLE_CLIENT_ID,
           client_secret: process.env.GOOGLE_CLIENT_SECRET,
           redirect_uri: redirectUri,
           grant_type: 'authorization_code',
-        }), {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        }
-      );
+        })
+      });
+
+      const tokenData = await tokenResponse.json();
+      
+      if (!tokenResponse.ok) {
+        throw new Error(tokenData.error_description || tokenData.error || 'Token exchange failed');
+      }
 
       console.log('Token exchange successful');
-      const { access_token, refresh_token, expires_in } = tokenResponse.data;
+      const { access_token, refresh_token, expires_in } = tokenData;
 
       // Redirect back to main app with tokens
       const appUrl = `${baseUrl}/?access_token=${access_token}&refresh_token=${refresh_token || ''}&expires_in=${expires_in}`;
@@ -70,28 +75,13 @@ export default async function handler(req, res) {
       return res.redirect(appUrl);
 
     } catch (error) {
-      console.error('Token exchange error details:', {
-        message: error.message,
-        responseData: error.response?.data,
-        status: error.response?.status,
-        headers: error.response?.headers
-      });
-
-      let errorMessage = 'Authentication failed';
-      if (error.response?.data) {
-        errorMessage = error.response.data.error_description || error.response.data.error || errorMessage;
-      }
+      console.error('Token exchange error:', error.message);
 
       return res.status(500).send(`
         <html>
           <body style="font-family: Arial, sans-serif; padding: 40px; text-align: center;">
             <h1>Authentication Failed</h1>
-            <p><strong>Error:</strong> ${errorMessage}</p>
-            <div style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0; text-align: left;">
-              <strong>Details:</strong><br>
-              ${error.message}<br>
-              ${error.response?.data ? JSON.stringify(error.response.data, null, 2) : ''}
-            </div>
+            <p><strong>Error:</strong> ${error.message}</p>
             <a href="/" style="padding: 10px 20px; background: #4285f4; color: white; text-decoration: none; border-radius: 5px;">Return to Home</a>
           </body>
         </html>
